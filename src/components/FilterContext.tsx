@@ -9,8 +9,8 @@ interface FilterContextProps {
     setMinPrice: (price: number | undefined) => void;
     maxPrice: number | undefined;
     setMaxPrice: (price: number | undefined) => void;
-    keyWords: string;
-    setKeyWords: (keyword: string) => void;
+    keyWord: string;
+    setKeyWord: (keyword: string) => void;
 }
 
 const FilterContext = createContext<FilterContextProps | undefined>(undefined);
@@ -21,5 +21,27 @@ export const FilterProvider: React.FC<{children: ReactNode}> = ({children,}) =>{
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
     const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
-    const [keyWords, setKeyWords] = useState<string>('');
+    const [keyWord, setKeyWord] = useState<string>('');
+
+    return <FilterContext.Provider value={{
+        searchQuery,
+        setSearchQuery,
+        selectedCategory,
+        setSelectedCategory,
+        minPrice,
+        setMinPrice,
+        maxPrice,
+        setMaxPrice,
+        keyWord,
+        setKeyWord
+    }}>{children}</FilterContext.Provider>
+}
+
+
+export const useFilter = () =>{
+    const context = useContext(FilterContext);
+    if(context === undefined){
+        throw new Error('useFilter must be used within a FilterProvider')
+    }
+    return context
 }
